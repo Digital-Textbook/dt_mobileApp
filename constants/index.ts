@@ -2,8 +2,31 @@ import onboarding1 from '@/assets/images/onboarding1.gif';
 import onboarding2 from '@/assets/images/onboarding2.gif';
 import onboarding3 from '@/assets/images/onboarding3.gif';
 import onboarding4 from '@/assets/images/onboarding4.gif';
+import signUp from '@/assets/images/signUp.png';
+import signUp1 from '@/assets/images/signUp1.png';
+import person from '@assets/icons/person.png';
+import logInBg from '@/assets/images/logInBg.png';
+import loginPerson from '@/assets/images/loginPerson.png';
+import loginPerson2 from '@/assets/images/loginPerson2.png';
 
 
+
+export const images = {
+    onboarding1,
+    onboarding2,
+    onboarding3,
+    signUp,
+    signUp1,
+    logInBg,
+    loginPerson,
+    loginPerson2,
+
+    
+};
+
+export const icons = {
+    person,
+}
 
 export const onboarding = [
     {
