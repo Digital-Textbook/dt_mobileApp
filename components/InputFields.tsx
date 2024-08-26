@@ -20,6 +20,7 @@ const InputField = ({
   inputStyle,
   iconStyle,
   className,
+  error,
   ...props
 }: InputFieldProps) => (
   <KeyboardAvoidingView
@@ -45,6 +46,12 @@ const InputField = ({
             {...props}
           />
         </View>
+                {/* Display the error message if present */}
+                {error && (
+          <Text className="text-red-500 text-sm mt-1">
+            {error}
+          </Text>
+        )}
       </View>
     </TouchableWithoutFeedback>
   </KeyboardAvoidingView>

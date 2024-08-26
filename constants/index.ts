@@ -8,6 +8,9 @@ import person from '@assets/icons/person.png';
 import logInBg from '@/assets/images/logInBg.png';
 import loginPerson from '@/assets/images/loginPerson.png';
 import loginPerson2 from '@/assets/images/loginPerson2.png';
+import otpBg from '@/assets/images/otpBg.jpeg';
+import shieldOtp from '@assets/images/shieldOtp.png';
+import reset from '@/assets/images/reset.png'
 
 
 
@@ -20,6 +23,9 @@ export const images = {
     logInBg,
     loginPerson,
     loginPerson2,
+    otpBg,
+    shieldOtp,
+    reset,
 
     
 };
