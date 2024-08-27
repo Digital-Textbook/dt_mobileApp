@@ -11,11 +11,12 @@ export default function Layout() {
       <Stack>
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="sign-up" options={{ headerShown: false }} />
+        <Stack.Screen name="non-bhutanese-sign-up" options={{ headerShown: false }} />
         <Stack.Screen name="sign-in" options={{ headerShown: false }} />
         <Stack.Screen name="otp" options={{ headerShown: false }} />
         <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
-
-
+        <Stack.Screen name="set-password" options={{ headerShown: false }} />
+        <Stack.Screen name="user-type" options={{ headerShown: false }} />
       </Stack>
   );
 }

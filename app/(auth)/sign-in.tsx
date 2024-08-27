@@ -4,12 +4,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import InputField from "@/components/InputFields";
 import CustomButton from "@/components/customButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { icons, images } from "@/constants";
 
 // Define the validation schema with Yup
 const validationSchema = Yup.object().shape({
-    student_code: Yup.string()
+    cid_no: Yup.string()
         .required("Student Code is required"),
     password: Yup.string()
         .required("Password is required")
@@ -19,13 +19,14 @@ const SignIn = () => {
     // Initialize Formik with initial values and validation schema
     const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
         initialValues: {
-            student_code: '',
+            cid_no: '',
             password: '',
         },
         validationSchema,
         onSubmit: async (values) => {
             // Handle the sign-up logic here
-            console.log(values);
+            console.log('Form values:', values);
+            router.replace('/(root)/(tabs)/home');
         },
     });
 
@@ -42,15 +43,8 @@ const SignIn = () => {
                             <Image source={images.logInBg} />
                         </View>
 
-                        <Image
-                            source={images.loginPerson2}
-                            className="absolute top-10"
-                        />
-
-                        <Image
-                            source={images.loginPerson}
-                            className="absolute right-0 top-36"
-                        />
+                        <Image source={images.loginPerson2} className="absolute top-10" />
+                        <Image source={images.loginPerson} className="absolute right-0 top-36" />
 
                         <View className="flex justify-center items-center p-2">
                             <Text className="text-xl text-white font-interSemiBold mt-6 text-center">
@@ -61,13 +55,13 @@ const SignIn = () => {
                         <View className="px-5">
                             <InputField
                                 placeholderTextColor="#CCCCCC"
-                                label="Student Code"
-                                placeholder="Student Code"
+                                label="Cid No / Permit No"
+                                placeholder="Cid/Permit Number"
                                 icon={icons.person}
-                                value={values.student_code}
-                                onChangeText={handleChange('student_code')}
-                                onBlur={handleBlur('student_code')}
-                                error={touched.student_code && errors.student_code}
+                                value={values.cid_no}
+                                onChangeText={handleChange('cid_no')}
+                                onBlur={handleBlur('cid_no')}
+                                error={touched.cid_no && errors.cid_no}
                             />
                             <InputField
                                 placeholderTextColor="#CCCCCC"
@@ -84,7 +78,7 @@ const SignIn = () => {
                                 <CustomButton title="Log In" onPress={handleSubmit} className="w-full" />
                             </View>
 
-                            <Link href="/sign-up" className="text-lg text-left text-general-200 pt-6 -mt-20">
+                            <Link href="/user-type" className="text-lg text-left text-general-200 pt-6 -mt-20">
                                 <Text>Don't Have An Account?</Text>
                                 <Text className="text-primary-500">Register</Text>
                             </Link>

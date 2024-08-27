@@ -35,7 +35,7 @@ const InputField = ({
                 </Text> */}
 
         <View
-          className={`flex flex-row justify-start items-center relative bg-[#ffff] rounded-lg border border-[#9FA0A0] focus:border-primary-500 ${containerStyle}`}
+          className={`flex flex-row justify-start items-center relative bg-[#ffff] rounded-lg border border-[#9FA0A0] focus:border-primary-500 h-12 ${containerStyle}`}
         >
           {icon && (
             <Image source={icon} className={`w-6 h-6 ml-4 ${iconStyle}`} />

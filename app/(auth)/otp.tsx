@@ -27,6 +27,7 @@ const OTPInput = () => {
 
   const handleSubmit = () => {
     console.log('OTP Submitted:', otp.join(''));
+    router.replace('/(auth)/set-password');
   };
 
   return (

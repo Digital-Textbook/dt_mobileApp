@@ -11,7 +11,7 @@ import RadioButton from "@/components/radioButton";
 // Define Yup validation schema
 const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    cid_no: Yup.string().required('CID No is required'),
+    permit_number: Yup.string().required('CID No is required'),
     // student_code: Yup.string().required('Student Code is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
     mobile_no: Yup.string().required('Mobile Number is required'),
@@ -34,7 +34,7 @@ const SignUp = () => {
     const formik = useFormik({
         initialValues: {
             name: '',
-            cid_no: '',
+            permit_number: '',
             // student_code: '',
             email: '',
             mobile_no: '',
@@ -108,12 +108,12 @@ const SignUp = () => {
                             />
                             <InputField
                                 placeholderTextColor="#CCCCCC"
-                                label="CID"
-                                placeholder="CID No"
+                                label="Permit Number"
+                                placeholder="Permit Number"
                                 icon={icons.person}
-                                value={formik.values.cid_no}
-                                onChangeText={formik.handleChange('cid_no')}
-                                error={formik.errors.cid_no}
+                                value={formik.values.permit_number}
+                                onChangeText={formik.handleChange('permit_number')}
+                                error={formik.errors.permit_number}
                             />
                             {/* <InputField
                                 placeholderTextColor="#CCCCCC"

@@ -1,9 +1,7 @@
-// ForgotPassword.tsx
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ImageBackground,Image} from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { View, Text, TouchableOpacity, ImageBackground, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Alert, ScrollView } from 'react-native';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import CustomButton from '@/components/customButton';
 import InputFields from '@/components/InputFields';
 import { icons, images } from '@/constants';
@@ -11,27 +9,25 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 
 // Define validation schema with Yup
-const schema = yup.object({
-    email: yup.string().email('Invalid email address').required('Email is required'),
-}).required();
-
-interface FormData {
-    email: string;
-}
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+});
 
 const ForgotPassword: React.FC = () => {
-    const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
-        resolver: yupResolver(schema),
-        
-    });
     const router = useRouter(); // Get router object
 
-
-    const onSubmit = (data: FormData) => {
-        // Handle forgot password logic here
-        Alert.alert('Reset Link Sent', `A reset link has been sent to ${data.email}`);
-        // Implement your API call here
-    };
+    // Initialize Formik
+    const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
+        initialValues: {
+            email: '',
+        },
+        validationSchema,
+        onSubmit: (values) => {
+            // Handle forgot password logic here
+            Alert.alert('Reset Link Sent', `A reset link has been sent to ${values.email}`);
+            // Implement your API call here
+        },
+    });
 
     return (
         <ImageBackground
@@ -39,50 +35,53 @@ const ForgotPassword: React.FC = () => {
             className='flex-1 w-full h-full'
             resizeMode='cover'
         >
-        <TouchableOpacity 
-        // onPress={() => navigation.goBack()}
-        onPress={() => router.push('/sign-in')}
-        className="w-full flex justify-start items-start pt-14 pl-5"
-        >
-        <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
+                keyboardVerticalOffset={Platform.select({ ios: 0, android: 20 })}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-[#F2F2F2]">
 
-            <View className='flex-1 justify-center px-4 pt-10'>
-                <View className="relative w-full h-[250px]">
-                    <Image source={images.reset} className="z-0 w-full h-[300px]" />
-                </View>
+                    <View className='flex-1 justify-center px-4 bottom-64'>
+                        <TouchableOpacity 
+                            onPress={() => router.push('/sign-in')}
+                            className="w-full flex justify-start items-start pt-14 pl-5"
+                        >
+                            <Ionicons name="arrow-back" size={24} color="black" />
+                        </TouchableOpacity>
 
-                <Text className='text-2xl font-bold mb-2 pt-10 text-center'>Reset Password</Text>
-                <Text className='text-lg mb-6 text-center'>Please provide the email address that you used when you signed up for the account.</Text>
+                        <View className="relative w-full h-[250px]">
+                            <Image source={images.reset} className="w-full h-[300px]" />
 
-                <Controller
-                    control={control}
-                    name="email"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <InputFields
-                            placeholderTextColor="#CCCCCC"
-                            label="Email"
-                            placeholder="Email"
-                            onBlur={onBlur}
-                            icon={icons.person}
-                            onChangeText={onChange}
-                            value={value}
-                            error={errors.email?.message}
-                        />
-                    )}
-                />
-                {errors.email && <Text className='text-red-500 mb-4'>{errors.email.message}</Text>}
+                            <Text className='text-2xl font-bold mb-2 pt-10 text-center'>Reset Password</Text>
+                            <Text className='text-lg mb-6 text-center'>
+                                Please provide the email address that you used when you signed up for the account.
+                            </Text>
 
-                
-                <View className="w-full bottom-44">
-                    <CustomButton
-                        title="Reset Password"
-                        onPress={handleSubmit(onSubmit)}
-                        className='w-full'
-                    />
-                </View>
-                
-            </View>
+                            <InputFields
+                                placeholderTextColor="#CCCCCC"
+                                label="Email"
+                                placeholder="Email"
+                                onBlur={handleBlur('email')}
+                                icon={icons.person}
+                                onChangeText={handleChange('email')}
+                                value={values.email}
+                                error={touched.email && errors.email}
+                            />
+
+                            <CustomButton
+                                title="Reset Password"
+                                onPress={handleSubmit}
+                                className='w-full mt-20'
+                            />
+                        </View>
+
+                    </View>
+                </ScrollView>
+
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </ImageBackground>
     );
 };
