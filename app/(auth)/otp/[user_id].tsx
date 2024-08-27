@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, KeyboardAvoidingView, Platform, ImageBackground, Image, TouchableOpacity } from 'react-native';
 import CustomButton from "@/components/customButton"; 
 import { images } from '@/constants'; // Make sure to import your image correctly
-import { Link, router } from 'expo-router';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { HandleInputChange } from '@/types/type';
-
+import axios from "axios";
 
 const OTPInput = () => {
+  const { user_id } = useLocalSearchParams();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const inputRefs: (TextInput | null)[] = [];
 
@@ -25,9 +26,21 @@ const OTPInput = () => {
     }
   };
 
-  const handleSubmit = () => {
-    console.log('OTP Submitted:', otp.join(''));
-    router.replace('/(auth)/set-password');
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(`http://172.20.10.7:3001/user/${user_id}/VerifyOtpEmail/${otp}`, {}, {
+        headers: { 'accept': '*/*' }
+      });
+
+      const data = response.data;
+      router.replace(`/(auth)/set-password/${user_id}`);
+    } catch (error: any) {
+        if (error.response) {
+            console.error(`OTP PAGE - HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
+        } else {
+            console.error('OTP PAGE - Error:', error.message);
+        }
+    }
   };
 
   return (

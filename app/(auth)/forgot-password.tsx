@@ -7,6 +7,7 @@ import InputFields from '@/components/InputFields';
 import { icons, images } from '@/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
+import axios from 'axios';
 
 // Define validation schema with Yup
 const validationSchema = Yup.object().shape({
@@ -22,10 +23,29 @@ const ForgotPassword: React.FC = () => {
             email: '',
         },
         validationSchema,
-        onSubmit: (values) => {
-            // Handle forgot password logic here
-            Alert.alert('Reset Link Sent', `A reset link has been sent to ${values.email}`);
-            // Implement your API call here
+        onSubmit: async (values) => {
+            try {
+                const response = await axios.post(
+                    'http://172.20.10.7:3001/user/forgot-password',
+                    { ...values },
+                    { headers: { 'Content-Type': 'application/json', 'accept': '*/*' } }
+                );
+        
+                // Handle successful response
+                const data = response.data;
+                console.log('Success:', data);
+        
+                // Perform actions based on successful request if needed
+                router.replace(`/(auth)/otp/${data["user"]["id"]}`);
+            } catch (error: any) {
+                if (error.response) {
+                    // Server responded with a status other than 200 range
+                    console.error(`Forgot Password - HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
+                } else {
+                    // Something went wrong in setting up the request
+                    console.error('Forgot Password - Error:', error.message);
+                }
+            }
         },
     });
 

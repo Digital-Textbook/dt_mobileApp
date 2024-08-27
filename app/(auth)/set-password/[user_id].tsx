@@ -2,11 +2,11 @@ import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform, Touchabl
 import React, { useState } from "react";
 import InputField from "@/components/InputFields";
 import CustomButton from "@/components/customButton";
-import { Link, router } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import { icons, images } from "@/constants";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import axios from "axios";
 
 // Define Yup validation schema
 const validationSchema = Yup.object().shape({
@@ -24,6 +24,8 @@ const validationSchema = Yup.object().shape({
 });
 
 const SetPassword = () => {
+    const { user_id } = useLocalSearchParams();
+
     const formik = useFormik({
         initialValues: {
             password: '',
@@ -33,31 +35,26 @@ const SetPassword = () => {
         validateOnChange: false,
         validateOnBlur: false,
         onSubmit: async (values) => {
-            // TODO: Uncomment this when API is ready.
-            // try {
-            //     const response = await fetch('http://192.168.162.163:3000/user/register', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({ ...values, otpOption: otpOption }),
-            //     });
+            try {
+                const response = await axios.post(
+                    `http://172.20.10.7:3001/user/${user_id}/update-password/${values['password']}`, 
+                    {}, // Empty body
+                    { headers: { 'accept': '*/*'} }
+                );
         
-            //     if (!response.ok) {
-            //         const errorData = await response.json();
-            //         throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message}`);
-            //     }
-        
-            //     const data = await response.json();
-            //     console.log('Success:', data);
-            //     router.replace("/(auth)/otp");
-            // } catch (error) {
-            //     console.error('Error:', error.message);
-            // }
-
-            // TODO: comment all the code below after API is ready.
-            console.log("Log In")
-            router.replace("/(auth)/sign-in");
+                // Handle successful response
+                const data = response.data;
+                console.log('Success:', data);
+                router.replace("/(auth)/sign-in");
+            } catch (error: any) {
+                if (error.response) {
+                    // Server responded with a status other than 200 range
+                    console.error(`HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
+                } else {
+                    // Something went wrong in setting up the request
+                    console.error('Error:', error.message);
+                }
+            }
         }
     });
 

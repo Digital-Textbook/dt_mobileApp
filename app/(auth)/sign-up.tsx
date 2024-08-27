@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import InputField from "@/components/InputFields";
 import CustomButton from "@/components/customButton";
@@ -7,76 +7,87 @@ import { icons, images } from "@/constants";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import RadioButton from "@/components/radioButton";
+import axios from "axios";
 
 // Define Yup validation schema
 const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     cid_no: Yup.string().required('CID No is required'),
-    // student_code: Yup.string().required('Student Code is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
     mobile_no: Yup.string().required('Mobile Number is required'),
-    // user_type: Yup.string().required('User Type is required'),
-    // password: Yup.string()
-    //     .min(8, 'Password must be at least 8 characters')
-    //     .max(20, 'Password cannot exceed 20 characters')
-    //     .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    //     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    //     .matches(/[0-9]/, 'Password must contain at least one number')
-    //     .matches(/[@$!%*?&#]/, 'Password must contain at least one special character')
-    //     .required('Password is required'),
-    // password_confirmation: Yup.string()
-    //     .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    //     .required('Password Confirmation is required')
+    gender: Yup.string().required('Gender is required'),
 });
 
 const SignUp = () => {
     const [otpOption, setOtpOption] = useState('email');
+    const [loading, setLoading] = useState(false);
+    const [userId, setUserId] = useState('');
+
     const formik = useFormik({
         initialValues: {
             name: '',
             cid_no: '',
-            // student_code: '',
             email: '',
             mobile_no: '',
-            // user_type: '',
-            // password: '',
-            // password_confirmation: '',
-            // otpOption: 'email',
-            // gender: ''
+            gender: ''
         },
         validationSchema,
         validateOnChange: false,
         validateOnBlur: false,
         onSubmit: async (values) => {
-            console.log({ ...values, otpOption })
+            console.log({ ...values, otpOption });
 
-            // TODO: Uncomment this when API is ready.
-            // try {
-            //     const response = await fetch('http://192.168.162.163:3000/user/register', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({ ...values, otpOption: otpOption }),
-            //     });
-        
-            //     if (!response.ok) {
-            //         const errorData = await response.json();
-            //         throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message}`);
-            //     }
-        
-            //     const data = await response.json();
-            //     console.log('Success:', data);
-            //     router.replace("/(auth)/otp");
-            // } catch (error) {
-            //     console.error('Error:', error.message);
-            // }
+            console.log({ email: values['email'], mobileNo: values['mobile_no'], otpOption });
 
-            // TODO: comment all the code below after API is ready.
-            router.replace("/(auth)/otp");
+            try {
+                const response = await axios.patch(
+                    `http://172.20.10.7:3001/user/registerByCid/${userId}`, 
+                    {
+                        email: values['email'],
+                        mobileNo: values['mobile_no'],
+                        otpOption: otpOption
+                    },
+                    { headers: { 'Content-Type': 'application/json' } }
+                );
+        
+                // Handle successful response
+                const data = response.data;
+                console.log('Success:', data);
+        
+                // Navigate to the OTP page
+                router.replace(`/(auth)/otp/${userId}`);
+            } catch (error: any) {
+                if (error.response) {
+                    console.error(`HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
+                } else {
+                    console.error('Error:', error.message);
+                }
+            }
         }
     });
 
+    const fetchCitizenDetails = async (cid_no) => {
+        if (cid_no.length !== 11) return; // Ensure CID is exactly 11 characters long
+    
+        setLoading(true);
+        try {
+            const response = await axios.post(`http://172.20.10.7:3001/user/getCidDetail/${cid_no}`, {}, {
+                headers: { 'accept': '*/*', }
+            });
+    
+            // Since axios automatically parses the JSON, you can access the data directly
+            const data = response.data;
+            setUserId(data.id);
+            // Populate name and gender fields
+            formik.setFieldValue('name', data.name);
+            formik.setFieldValue('gender', data.gender);
+        } catch (error) {
+            console.error('Error fetching citizen details:', error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -90,13 +101,27 @@ const SignUp = () => {
                             <Image source={images.signUp} className="z-0 w-full h-[250px]" />
                         </View>
 
-                        <View className="flex justify-center items-center p-5" >
+                        <View className="flex justify-center items-center p-5">
                             <Text className="text-xl text-black font-interSemiBold text-center">
                                 Start Exploring Our Library – Register Today!
                             </Text>
                         </View>
 
                         <View className="px-5">
+                            <InputField
+                                placeholderTextColor="#CCCCCC"
+                                label="CID"
+                                placeholder="CID No"
+                                icon={icons.person}
+                                value={formik.values.cid_no}
+                                onChangeText={(text) => {
+                                    formik.handleChange('cid_no')(text);
+                                    fetchCitizenDetails(text);  // Fetch citizen details on CID input change
+                                }}
+                                error={formik.errors.cid_no}
+                            />
+                            {loading && <ActivityIndicator size="small" color="#0000ff" />}
+
                             <InputField
                                 placeholderTextColor="#CCCCCC"
                                 label="Name"
@@ -108,31 +133,13 @@ const SignUp = () => {
                             />
                             <InputField
                                 placeholderTextColor="#CCCCCC"
-                                label="CID"
-                                placeholder="CID No"
-                                icon={icons.person}
-                                value={formik.values.cid_no}
-                                onChangeText={formik.handleChange('cid_no')}
-                                error={formik.errors.cid_no}
-                            />
-                            {/* <InputField
-                                placeholderTextColor="#CCCCCC"
-                                label="gender"
+                                label="Gender"
                                 placeholder="Gender"
                                 icon={icons.person}
                                 value={formik.values.gender}
                                 onChangeText={formik.handleChange('gender')}
                                 error={formik.errors.gender}
-                            /> */}
-                            {/* <InputField
-                                placeholderTextColor="#CCCCCC"
-                                label="Student Code"
-                                placeholder="Student Code"
-                                icon={icons.person}
-                                value={formik.values.student_code}
-                                onChangeText={formik.handleChange('student_code')}
-                                error={formik.errors.student_code}
-                            /> */}
+                            />
                             <InputField
                                 placeholderTextColor="#CCCCCC"
                                 label="Email"
@@ -152,35 +159,6 @@ const SignUp = () => {
                                 onChangeText={formik.handleChange('mobile_no')}
                                 error={formik.errors.mobile_no}
                             />
-                            {/* <InputField
-                                placeholderTextColor="#CCCCCC"
-                                label="User Type"
-                                placeholder="User Type"
-                                icon={icons.person}
-                                value={formik.values.user_type}
-                                onChangeText={formik.handleChange('user_type')}
-                                error={formik.errors.user_type}
-                            /> */}
-                            {/* <InputField
-                                placeholderTextColor="#CCCCCC"
-                                label="Password"
-                                placeholder="Password"
-                                icon={icons.person}
-                                value={formik.values.password}
-                                onChangeText={formik.handleChange('password')}
-                                secureTextEntry
-                                error={formik.errors.password}
-                            />
-                            <InputField
-                                placeholderTextColor="#CCCCCC"
-                                label="Password Confirmation"
-                                placeholder="Password Confirmation"
-                                icon={icons.person}
-                                value={formik.values.password_confirmation}
-                                onChangeText={formik.handleChange('password_confirmation')}
-                                secureTextEntry
-                                error={formik.errors.password_confirmation}
-                            /> */}
 
                             <View className="my-1">
                                 <Text className="text-md text-gray-700 mb-2">Choose OTP Option:</Text>
@@ -200,7 +178,7 @@ const SignUp = () => {
                                             value="mobile"
                                             selectedValue={otpOption}
                                             onSelect={setOtpOption}
-                                            />
+                                        />
                                     </View>
                                 </View>
                             </View>
@@ -238,4 +216,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-

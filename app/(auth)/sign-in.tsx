@@ -6,6 +6,7 @@ import InputField from "@/components/InputFields";
 import CustomButton from "@/components/customButton";
 import { Link, router } from "expo-router";
 import { icons, images } from "@/constants";
+import axios from 'axios';
 
 // Define the validation schema with Yup
 const validationSchema = Yup.object().shape({
@@ -24,9 +25,27 @@ const SignIn = () => {
         },
         validationSchema,
         onSubmit: async (values) => {
-            // Handle the sign-up logic here
-            console.log('Form values:', values);
-            router.replace('/(root)/(tabs)/home');
+            try {
+                const response = await axios.post(
+                    'http://172.20.10.7:3001/auth/login',
+                    { cidNo: values['cid_no'], password: values['password'] },
+                    { headers: { 'Content-Type': 'application/json', 'accept': '*/*' } }
+                );
+        
+                // Handle successful response
+                const data = response.data;
+                console.log('Login Success: ', data);
+        
+                router.replace('/(root)/(tabs)/home');
+            } catch (error: any) {
+                if (error.response) {
+                    // Server responded with a status other than 200 range
+                    console.error(`HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
+                } else {
+                    // Something went wrong in setting up the request
+                    console.error('Error:', error.message);
+                }
+            }
         },
     });
 

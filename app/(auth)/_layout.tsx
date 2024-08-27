@@ -13,9 +13,9 @@ export default function Layout() {
         <Stack.Screen name="sign-up" options={{ headerShown: false }} />
         <Stack.Screen name="non-bhutanese-sign-up" options={{ headerShown: false }} />
         <Stack.Screen name="sign-in" options={{ headerShown: false }} />
-        <Stack.Screen name="otp" options={{ headerShown: false }} />
+        <Stack.Screen name="otp/[user_id]" options={{ headerShown: false }} />
         <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
-        <Stack.Screen name="set-password" options={{ headerShown: false }} />
+        <Stack.Screen name="set-password/[user_id]" options={{ headerShown: false }} />
         <Stack.Screen name="user-type" options={{ headerShown: false }} />
       </Stack>
   );

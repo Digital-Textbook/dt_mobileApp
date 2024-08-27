@@ -7,26 +7,14 @@ import { icons, images } from "@/constants";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import RadioButton from "@/components/radioButton";
+import axios from "axios";
 
 // Define Yup validation schema
 const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     permit_number: Yup.string().required('CID No is required'),
-    // student_code: Yup.string().required('Student Code is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
     mobile_no: Yup.string().required('Mobile Number is required'),
-    // user_type: Yup.string().required('User Type is required'),
-    // password: Yup.string()
-    //     .min(8, 'Password must be at least 8 characters')
-    //     .max(20, 'Password cannot exceed 20 characters')
-    //     .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    //     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    //     .matches(/[0-9]/, 'Password must contain at least one number')
-    //     .matches(/[@$!%*?&#]/, 'Password must contain at least one special character')
-    //     .required('Password is required'),
-    // password_confirmation: Yup.string()
-    //     .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    //     .required('Password Confirmation is required')
 });
 
 const SignUp = () => {
@@ -35,45 +23,52 @@ const SignUp = () => {
         initialValues: {
             name: '',
             permit_number: '',
-            // student_code: '',
             email: '',
             mobile_no: '',
-            // user_type: '',
-            // password: '',
-            // password_confirmation: '',
-            // otpOption: 'email',
-            // gender: ''
+            gender: ''
         },
         validationSchema,
         validateOnChange: false,
         validateOnBlur: false,
         onSubmit: async (values) => {
-            console.log({ ...values, otpOption })
-
-            // TODO: Uncomment this when API is ready.
-            // try {
-            //     const response = await fetch('http://192.168.162.163:3000/user/register', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({ ...values, otpOption: otpOption }),
-            //     });
+            console.log(values)
+            try {
+                console.log({ 
+                    name: values['name'],
+                    permitNo: values['permit_number'],
+                    email: values['email'],
+                    mobileNo: values['mobile_no'],
+                    userType: 'Bhutanese_with_permit',
+                    gender: values['gender'].toUpperCase(),
+                    otpOption,
+                });
+                const response = await axios.post(
+                    'http://172.20.10.7:3001/user/registerByPermit', 
+                    { 
+                        name: values['name'],
+                        permitNo: values['permit_number'],
+                        email: values['email'],
+                        mobileNo: values['mobile_no'],
+                        userType: 'Bhutanese_with_permit',
+                        gender: values['gender'].toUpperCase(),
+                        otpOption,
+                    },
+                    { headers: { 'Content-Type': 'application/json' } }
+                );
         
-            //     if (!response.ok) {
-            //         const errorData = await response.json();
-            //         throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message}`);
-            //     }
+                // Handle successful response
+                const data = response.data;
+                console.log('Success:', data);
         
-            //     const data = await response.json();
-            //     console.log('Success:', data);
-            //     router.replace("/(auth)/otp");
-            // } catch (error) {
-            //     console.error('Error:', error.message);
-            // }
-
-            // TODO: comment all the code below after API is ready.
-            router.replace("/(auth)/otp");
+                // Navigate to the OTP page
+                router.replace(`/(auth)/otp/${data["user"]["id"]}`);
+            } catch (error: any) {
+                if (error.response) {
+                    console.error(`HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
+                } else {
+                    console.error('Error:', error.message);
+                }
+            }
         }
     });
 
@@ -115,7 +110,7 @@ const SignUp = () => {
                                 onChangeText={formik.handleChange('permit_number')}
                                 error={formik.errors.permit_number}
                             />
-                            {/* <InputField
+                            <InputField
                                 placeholderTextColor="#CCCCCC"
                                 label="gender"
                                 placeholder="Gender"
@@ -123,7 +118,7 @@ const SignUp = () => {
                                 value={formik.values.gender}
                                 onChangeText={formik.handleChange('gender')}
                                 error={formik.errors.gender}
-                            /> */}
+                            />
                             {/* <InputField
                                 placeholderTextColor="#CCCCCC"
                                 label="Student Code"
