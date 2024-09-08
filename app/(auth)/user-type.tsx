@@ -31,7 +31,7 @@ const SignIn = () => {
                         </View>
 
                         <View className="px-5 flex-1 justify-start">
-                            <CustomButton title="Bhutanese" onPress={ () => router.replace('/(auth)/sign-up') } className="w-full mb-10" />
+                            <CustomButton title="Bhutanese" onPress={ () => router.replace('/(auth)/search') } className="w-full mb-10" />
                             <CustomButton title="Non-Bhutanese" onPress={ () => router.replace('/(auth)/non-bhutanese-sign-up') } className="w-full mt-0" />
                         </View>
 

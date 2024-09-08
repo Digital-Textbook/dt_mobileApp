@@ -30,7 +30,7 @@ const RadioButton = ({ label, value, selectedValue, onSelect }) => {
                     />
                 )}
             </View>
-            <Text>{label}</Text>
+            <Text className='text-black'>{label}</Text>
         </TouchableOpacity>
     );
 };

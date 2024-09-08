@@ -35,10 +35,6 @@ const SignUp = () => {
         validateOnChange: false,
         validateOnBlur: false,
         onSubmit: async (values) => {
-            console.log({ ...values, otpOption });
-
-            console.log({ email: values['email'], mobileNo: values['mobile_no'], otpOption });
-
             try {
                 const response = await axios.patch(
                     `http://172.20.10.7:3001/user/registerByCid/${userId}`, 
@@ -50,11 +46,8 @@ const SignUp = () => {
                     { headers: { 'Content-Type': 'application/json' } }
                 );
         
-                // Handle successful response
                 const data = response.data;
-                console.log('Success:', data);
         
-                // Navigate to the OTP page
                 router.replace(`/(auth)/otp/${userId}`);
             } catch (error: any) {
                 if (error.response) {
@@ -70,6 +63,7 @@ const SignUp = () => {
         if (cid_no.length !== 11) return; // Ensure CID is exactly 11 characters long
     
         setLoading(true);
+    
         try {
             const response = await axios.post(`http://172.20.10.7:3001/user/getCidDetail/${cid_no}`, {}, {
                 headers: { 'accept': '*/*', }

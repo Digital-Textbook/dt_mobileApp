@@ -10,7 +10,9 @@ import loginPerson from '@/assets/images/loginPerson.png';
 import loginPerson2 from '@/assets/images/loginPerson2.png';
 import otpBg from '@/assets/images/otpBg.jpeg';
 import shieldOtp from '@assets/images/shieldOtp.png';
-import reset from '@/assets/images/reset.png'
+import reset from '@/assets/images/reset.png';
+import add from '@assets/icons/add.png';
+import search from '@assets/icons/search.png';
 
 
 
@@ -32,6 +34,8 @@ export const images = {
 
 export const icons = {
     person,
+    add,
+    search
 }
 
 export const onboarding = [
