@@ -1,8 +1,5 @@
-import { Redirect } from "expo-router"
-import { View, Text } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { Redirect } from "expo-router";
 
-const Main = () =>{
-    return <Redirect href="/(auth)/onboarding"/>
-}
-export default Main
+const Main = () => <Redirect href="/(auth)/onboarding"/>
+
+export default Main;

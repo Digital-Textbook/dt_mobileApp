@@ -1,15 +1,37 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Tabs } from 'expo-router';
 
-export default function Layout() {
-  
+export default function TabLayout() {
   return (
-      <Stack>
-        <Stack.Screen name="home" options={{ headerShown: false }} />
-      </Stack>
+    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="books"
+        options={{
+          title: 'Book',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="book" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="bookmark"
+        options={{
+          title: 'Bookmark',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="bookmark" color={color} />,
+        }}
+      />
+    </Tabs>
   );
 }

@@ -1,56 +1,58 @@
 import { ButtonProps } from "@/types/type"
-import { TouchableOpacity,Text} from "react-native"
+import { TouchableOpacity, Text } from "react-native"
 
-const getBgVariantStyle= (variant:ButtonProps['bgVariant']) => {
-    switch(variant){
+const getBgVariantStyle = (variant: ButtonProps['bgVariant']) => {
+    switch (variant) {
         case "secondary":
             return "bg-gray-500";
         case "danger":
-            return "bg-red-500";   
+            return "bg-red-500";
         case "success":
             return "bg-green-500";
         case "outline":
             return "bg-transparent border-neutral-300 border-[0.5]";
-            default:
-                return 'bg-[#225FA7]';   
+        default:
+            return 'bg-[#225FA7]';
     }
 };
-const getTextVariantStyle= (variant:ButtonProps['textVariant']) => {
-    switch(variant){
+
+const getTextVariantStyle = (variant: ButtonProps['textVariant']) => {
+    switch (variant) {
         case "secondary":
             return "text-black";
         case "secondary":
-            return "text-gray-100";    
+            return "text-gray-100";
         case "danger":
-            return "text-red-100";   
+            return "text-red-100";
         case "success":
             return "text-green-100";
-        
-            default:
-                return 'text-white';   
+
+        default:
+            return 'text-white';
     }
 };
+
 const CustomButton = ({
-    onPress, 
-    title, 
-    bgVariant="primary",
-    textVariant="default",
+    onPress,
+    title,
+    bgVariant = "primary",
+    textVariant = "default",
     IconLeft,
     IconRight,
     className,
     ...props
-}:ButtonProps) => {
+}: ButtonProps) => {
     return (
         <TouchableOpacity
-        onPress={onPress}
-        className={
-            `rounded-xl flex p-3 flex-row justify-center items-center shadow-sm shadow-neutral-400/70 h-12 w-11/12 mt-10 mb-20 ${getBgVariantStyle(bgVariant)}
-        ${className}`}
-        {...props}>
-            {IconLeft && <IconLeft/>}
+            onPress={onPress}
+            className={
+                `rounded-xl flex p-3 flex-row justify-center items-center shadow-sm shadow-neutral-400/70 h-12 w-11/12 mt-10 mb-20 ${getBgVariantStyle(bgVariant)} ${className}`
+            }
+            {...props}
+        >
+            {IconLeft && <IconLeft />}
             <Text className={`text-lg font-interSemiBold ${getTextVariantStyle(textVariant)}`}>{title}</Text>
-            {IconRight && <IconRight/>}
-
+            {IconRight && <IconRight />}
         </TouchableOpacity>
     )
 }

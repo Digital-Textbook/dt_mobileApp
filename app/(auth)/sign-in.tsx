@@ -26,15 +26,15 @@ const SignIn = () => {
         validationSchema,
         onSubmit: async (values) => {
             try {
-                const response = await axios.post(
-                    'http://172.20.10.7:3001/auth/login',
-                    { cidNo: values['cid_no'], password: values['password'] },
-                    { headers: { 'Content-Type': 'application/json', 'accept': '*/*' } }
-                );
+                // const response = await axios.post(
+                //     'http://172.20.10.7:3001/auth/login',
+                //     { cidNo: values['cid_no'], password: values['password'] },
+                //     { headers: { 'Content-Type': 'application/json', 'accept': '*/*' } }
+                // );
         
-                // Handle successful response
-                const data = response.data;
-                console.log('Login Success: ', data);
+                // // Handle successful response
+                // const data = response.data;
+                // console.log('Login Success: ', data);
         
                 router.replace('/(root)/(tabs)/home');
             } catch (error: any) {

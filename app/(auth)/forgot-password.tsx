@@ -30,11 +30,11 @@ const ForgotPassword: React.FC = () => {
                     { ...values },
                     { headers: { 'Content-Type': 'application/json', 'accept': '*/*' } }
                 );
-        
+
                 // Handle successful response
                 const data = response.data;
                 console.log('Success:', data);
-        
+
                 // Perform actions based on successful request if needed
                 router.replace(`/(auth)/otp/${data["user"]["id"]}`);
             } catch (error: any) {
@@ -51,7 +51,7 @@ const ForgotPassword: React.FC = () => {
 
     return (
         <ImageBackground
-            source={images.otpBg} 
+            source={images.otpBg}
             className='flex-1 w-full h-full'
             resizeMode='cover'
         >
@@ -61,44 +61,44 @@ const ForgotPassword: React.FC = () => {
                 keyboardVerticalOffset={Platform.select({ ios: 0, android: 20 })}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-[#F2F2F2]">
+                    <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-[#F2F2F2]">
 
-                    <View className='flex-1 justify-center px-4 bottom-64'>
-                        <TouchableOpacity 
-                            onPress={() => router.push('/sign-in')}
-                            className="w-full flex justify-start items-start pt-14 pl-5"
-                        >
-                            <Ionicons name="arrow-back" size={24} color="black" />
-                        </TouchableOpacity>
+                        <View className='flex-1 justify-center px-4 bottom-64'>
+                            <TouchableOpacity
+                                onPress={() => router.push('/sign-in')}
+                                className="w-full flex justify-start items-start pt-14 pl-5"
+                            >
+                                <Ionicons name="arrow-back" size={24} color="black" />
+                            </TouchableOpacity>
 
-                        <View className="relative w-full h-[250px]">
-                            <Image source={images.reset} className="w-full h-[300px]" />
+                            <View className="relative w-full h-[250px]">
+                                <Image source={images.reset} className="w-full h-[300px]" />
 
-                            <Text className='text-2xl font-bold mb-2 pt-10 text-center'>Reset Password</Text>
-                            <Text className='text-lg mb-6 text-center'>
-                                Please provide the email address that you used when you signed up for the account.
-                            </Text>
+                                <Text className='text-2xl font-bold mb-2 pt-10 text-center'>Reset Password</Text>
+                                <Text className='text-lg mb-6 text-center'>
+                                    Please provide the email address that you used when you signed up for the account.
+                                </Text>
 
-                            <InputFields
-                                placeholderTextColor="#CCCCCC"
-                                label="Email"
-                                placeholder="Email"
-                                onBlur={handleBlur('email')}
-                                icon={icons.person}
-                                onChangeText={handleChange('email')}
-                                value={values.email}
-                                error={touched.email && errors.email}
-                            />
+                                <InputFields
+                                    placeholderTextColor="#CCCCCC"
+                                    label="Email"
+                                    placeholder="Email"
+                                    onBlur={handleBlur('email')}
+                                    icon={icons.person}
+                                    onChangeText={handleChange('email')}
+                                    value={values.email}
+                                    error={touched.email && errors.email}
+                                />
 
-                            <CustomButton
-                                title="Reset Password"
-                                onPress={handleSubmit}
-                                className='w-full mt-20'
-                            />
+                                <CustomButton
+                                    title="Reset Password"
+                                    onPress={handleSubmit}
+                                    className='w-full mt-20'
+                                />
+                            </View>
+
                         </View>
-
-                    </View>
-                </ScrollView>
+                    </ScrollView>
 
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
