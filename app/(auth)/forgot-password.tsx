@@ -6,8 +6,10 @@ import CustomButton from '@/components/customButton';
 import InputFields from '@/components/InputFields';
 import { icons, images } from '@/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import axios from 'axios';
+import forgotPassword from '@/services/api/users/ForgotPassword';
+import InputField from '@/components/InputFields';
 
 // Define validation schema with Yup
 const validationSchema = Yup.object().shape({
@@ -15,35 +17,20 @@ const validationSchema = Yup.object().shape({
 });
 
 const ForgotPassword: React.FC = () => {
-    const router = useRouter(); // Get router object
-
-    // Initialize Formik
-    const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
-        initialValues: {
-            email: '',
-        },
+    const formik = useFormik({
+        initialValues: { email: '' },
         validationSchema,
-        onSubmit: async (values) => {
+        validateOnChange: false,
+        validateOnBlur: false,
+        onSubmit: async (values, { setFieldError, setFieldValue }) => {
             try {
-                const response = await axios.post(
-                    'http://172.20.10.7:3001/user/forgot-password',
-                    { ...values },
-                    { headers: { 'Content-Type': 'application/json', 'accept': '*/*' } }
-                );
-
-                // Handle successful response
+                const response = await forgotPassword(values.email);
                 const data = response.data;
-                console.log('Success:', data);
-
-                // Perform actions based on successful request if needed
                 router.replace(`/(auth)/otp/${data["user"]["id"]}`);
             } catch (error: any) {
-                if (error.response) {
-                    // Server responded with a status other than 200 range
-                    console.error(`Forgot Password - HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
-                } else {
-                    // Something went wrong in setting up the request
-                    console.error('Forgot Password - Error:', error.message);
+                const { status, data } = error.response;
+                if (status === 404) {
+                    setFieldError('email', data.message);
                 }
             }
         },
@@ -52,7 +39,7 @@ const ForgotPassword: React.FC = () => {
     return (
         <ImageBackground
             source={images.otpBg}
-            className='flex-1 w-full h-full'
+            className='w-full h-full'
             resizeMode='cover'
         >
             <KeyboardAvoidingView
@@ -62,41 +49,39 @@ const ForgotPassword: React.FC = () => {
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-[#F2F2F2]">
+                        <View className='flex justify-start px-4 items-start'>
+                            <View className='flex flex-row items-start justify-start pl-5 pt-14'>
+                                <TouchableOpacity onPress={() => router.push('/sign-in')}>
+                                    <Ionicons name="arrow-back" size={24} color="black" />
+                                </TouchableOpacity>
+                            </View>
 
-                        <View className='flex-1 justify-center px-4 bottom-64'>
-                            <TouchableOpacity
-                                onPress={() => router.push('/sign-in')}
-                                className="w-full flex justify-start items-start pt-14 pl-5"
-                            >
-                                <Ionicons name="arrow-back" size={24} color="black" />
-                            </TouchableOpacity>
+                            <Image source={images.reset} className="w-full h-60" />
 
-                            <View className="relative w-full h-[250px]">
-                                <Image source={images.reset} className="w-full h-[300px]" />
-
+                            <View className="relative">
                                 <Text className='text-2xl font-bold mb-2 pt-10 text-center'>Reset Password</Text>
                                 <Text className='text-lg mb-6 text-center'>
                                     Please provide the email address that you used when you signed up for the account.
                                 </Text>
+                            </View>
 
-                                <InputFields
+                            <View className='w-full'>
+                                <InputField
                                     placeholderTextColor="#CCCCCC"
                                     label="Email"
                                     placeholder="Email"
-                                    onBlur={handleBlur('email')}
+                                    className='py-2 rounded-none'
                                     icon={icons.person}
-                                    onChangeText={handleChange('email')}
-                                    value={values.email}
-                                    error={touched.email && errors.email}
+                                    onChangeText={formik.handleChange('email')}
+                                    value={formik.values.email}
+                                    error={formik.errors.email}
                                 />
-
                                 <CustomButton
                                     title="Reset Password"
-                                    onPress={handleSubmit}
-                                    className='w-full mt-20'
+                                    onPress={formik.handleSubmit}
+                                    className='w-full mt-1'
                                 />
                             </View>
-
                         </View>
                     </ScrollView>
 

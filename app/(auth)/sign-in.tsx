@@ -6,7 +6,7 @@ import InputField from "@/components/InputFields";
 import CustomButton from "@/components/customButton";
 import { Link, router } from "expo-router";
 import { icons, images } from "@/constants";
-import axios from 'axios';
+import login from "@/services/api/auth/Session";
 
 // Define the validation schema with Yup
 const validationSchema = Yup.object().shape({
@@ -17,33 +17,18 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignIn = () => {
-    // Initialize Formik with initial values and validation schema
     const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
-        initialValues: {
-            cid_no: '',
-            password: '',
-        },
+        initialValues: { cid_no: '', password: '' },
         validationSchema,
-        onSubmit: async (values) => {
+        onSubmit: async (values, { setFieldError }) => {
             try {
-                // const response = await axios.post(
-                //     'http://172.20.10.7:3001/auth/login',
-                //     { cidNo: values['cid_no'], password: values['password'] },
-                //     { headers: { 'Content-Type': 'application/json', 'accept': '*/*' } }
-                // );
-        
-                // // Handle successful response
-                // const data = response.data;
-                // console.log('Login Success: ', data);
-        
-                router.replace('/(root)/(tabs)/home');
-            } catch (error: any) {
-                if (error.response) {
-                    // Server responded with a status other than 200 range
-                    console.error(`HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
-                } else {
-                    // Something went wrong in setting up the request
-                    console.error('Error:', error.message);
+                const response = login(values['cid_no'], values['password']);
+                router.replace("/(root)/(tabs)/home");
+            } catch (error : any) {
+                const { status, data } = error.response;
+
+                if(status == 409) {
+                    setFieldError('cid_no', data.message);
                 }
             }
         },
@@ -76,6 +61,7 @@ const SignIn = () => {
                                 placeholderTextColor="#CCCCCC"
                                 label="Cid No / Permit No"
                                 placeholder="Cid/Permit Number"
+                                className="py-2 rounded-none"
                                 icon={icons.person}
                                 value={values.cid_no}
                                 onChangeText={handleChange('cid_no')}
@@ -86,6 +72,7 @@ const SignIn = () => {
                                 placeholderTextColor="#CCCCCC"
                                 label="Password"
                                 placeholder="Password"
+                                className="py-2 rounded-none"
                                 icon={icons.person}
                                 value={values.password}
                                 onChangeText={handleChange('password')}

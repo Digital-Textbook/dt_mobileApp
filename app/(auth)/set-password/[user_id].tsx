@@ -7,6 +7,7 @@ import { icons, images } from "@/constants";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import updatePassword from "@/services/api/users/UpdatePassword";
 
 // Define Yup validation schema
 const validationSchema = Yup.object().shape({
@@ -34,26 +35,13 @@ const SetPassword = () => {
         validationSchema,
         validateOnChange: false,
         validateOnBlur: false,
-        onSubmit: async (values) => {
-            try {
-                const response = await axios.post(
-                    `http://172.20.10.7:3001/user/${user_id}/update-password/${values['password']}`, 
-                    {}, // Empty body
-                    { headers: { 'accept': '*/*'} }
-                );
-        
-                // Handle successful response
-                const data = response.data;
-                console.log('Success:', data);
+        onSubmit: async (values) => {   
+            try {     
+                const response = await updatePassword(user_id as string, values.password);
                 router.replace("/(auth)/sign-in");
             } catch (error: any) {
-                if (error.response) {
-                    // Server responded with a status other than 200 range
-                    console.error(`HTTP error! Status: ${error.response.status}, Message: ${error.response.data.message}`);
-                } else {
-                    // Something went wrong in setting up the request
-                    console.error('Error:', error.message);
-                }
+               const { status, data } = error.response;
+        
             }
         }
     });
@@ -82,6 +70,7 @@ const SetPassword = () => {
                                 placeholderTextColor="#CCCCCC"
                                 label="Password"
                                 placeholder="Password"
+                                className="py-2 rounded-none"
                                 icon={icons.person}
                                 value={formik.values.password}
                                 onChangeText={formik.handleChange('password')}
@@ -92,6 +81,7 @@ const SetPassword = () => {
                                 placeholderTextColor="#CCCCCC"
                                 label="Password Confirmation"
                                 placeholder="Password Confirmation"
+                                className="py-2 rounded-none"
                                 icon={icons.person}
                                 value={formik.values.password_confirmation}
                                 onChangeText={formik.handleChange('password_confirmation')}

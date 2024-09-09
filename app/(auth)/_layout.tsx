@@ -7,14 +7,15 @@ export default function Layout() {
     return (
         <Stack>
             <Stack.Screen name="onboarding" options={defaultScreenOptions} />
-            <Stack.Screen name="sign-up" options={defaultScreenOptions} />
             <Stack.Screen name="non-bhutanese-sign-up" options={defaultScreenOptions} />
             <Stack.Screen name="sign-in" options={defaultScreenOptions} />
             <Stack.Screen name="otp/[user_id]" options={defaultScreenOptions} />
             <Stack.Screen name="forgot-password" options={defaultScreenOptions} />
             <Stack.Screen name="set-password/[user_id]" options={defaultScreenOptions} />
             <Stack.Screen name="user-type" options={defaultScreenOptions} />
-            <Stack.Screen name="search" options={defaultScreenOptions} />
+            <Stack.Screen name="users/search-by-cid" options={defaultScreenOptions} />
+            <Stack.Screen name="users/sign-up/bhutanese" options={defaultScreenOptions} />
+            <Stack.Screen name="users/sign-up/non-bhutanese" options={defaultScreenOptions} />
         </Stack>
     );
 }
