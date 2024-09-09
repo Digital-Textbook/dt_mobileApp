@@ -208,7 +208,7 @@ const SignUp = () => {
                                 />
                             </View>
 
-                            <Link href="/sign-in" className="text-lg text-left text-general-200 bottom-16">
+                            <Link href="/users/sign-in" className="text-lg text-left text-general-200 bottom-16">
                                 <Text>Already Have An Account?</Text>
                                 <Text className="text-primary-500">Log In</Text>
                             </Link>

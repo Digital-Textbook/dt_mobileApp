@@ -38,7 +38,7 @@ const SetPassword = () => {
         onSubmit: async (values) => {   
             try {     
                 const response = await updatePassword(user_id as string, values.password);
-                router.replace("/(auth)/sign-in");
+                router.replace("/(auth)/users/sign-in");
             } catch (error: any) {
                const { status, data } = error.response;
         

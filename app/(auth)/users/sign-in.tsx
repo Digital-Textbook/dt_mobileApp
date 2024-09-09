@@ -7,6 +7,7 @@ import CustomButton from "@/components/customButton";
 import { Link, router } from "expo-router";
 import { icons, images } from "@/constants";
 import login from "@/services/api/auth/Session";
+import { useSession } from "@/context/AuthContext";
 
 // Define the validation schema with Yup
 const validationSchema = Yup.object().shape({
@@ -17,12 +18,14 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignIn = () => {
-    const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
-        initialValues: { cid_no: '', password: '' },
+    const { signIn } = useSession();
+
+    const formik = useFormik({
+        initialValues: { cid_no: '11504000875', password: 'Password@123' },
         validationSchema,
         onSubmit: async (values, { setFieldError }) => {
             try {
-                const response = login(values['cid_no'], values['password']);
+                const response = signIn(values.cid_no, values.password);
                 router.replace("/(root)/(tabs)/home");
             } catch (error : any) {
                 const { status, data } = error.response;
@@ -63,10 +66,10 @@ const SignIn = () => {
                                 placeholder="Cid/Permit Number"
                                 className="py-2 rounded-none"
                                 icon={icons.person}
-                                value={values.cid_no}
-                                onChangeText={handleChange('cid_no')}
-                                onBlur={handleBlur('cid_no')}
-                                error={touched.cid_no && errors.cid_no}
+                                value={formik.values.cid_no}
+                                onChangeText={formik.handleChange('cid_no')}
+                                onBlur={formik.handleBlur('cid_no')}
+                                error={formik.errors.cid_no}
                             />
                             <InputField
                                 placeholderTextColor="#CCCCCC"
@@ -74,14 +77,14 @@ const SignIn = () => {
                                 placeholder="Password"
                                 className="py-2 rounded-none"
                                 icon={icons.person}
-                                value={values.password}
-                                onChangeText={handleChange('password')}
-                                onBlur={handleBlur('password')}
-                                error={touched.password && errors.password}
+                                value={formik.values.password}
+                                onChangeText={formik.handleChange('password')}
+                                onBlur={formik.handleBlur('password')}
+                                error={formik.errors.password}
                             />
 
                             <View className="-mt-5">
-                                <CustomButton title="Log In" onPress={handleSubmit} className="w-full" />
+                                <CustomButton title="Log In" onPress={formik.handleSubmit} className="w-full" />
                             </View>
 
                             <Link href="/user-type" className="text-lg text-left text-general-200 pt-6 -mt-20">

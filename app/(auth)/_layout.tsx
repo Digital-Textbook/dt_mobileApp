@@ -8,7 +8,7 @@ export default function Layout() {
         <Stack>
             <Stack.Screen name="onboarding" options={defaultScreenOptions} />
             <Stack.Screen name="non-bhutanese-sign-up" options={defaultScreenOptions} />
-            <Stack.Screen name="sign-in" options={defaultScreenOptions} />
+            <Stack.Screen name="users/sign-in" options={defaultScreenOptions} />
             <Stack.Screen name="otp/[user_id]" options={defaultScreenOptions} />
             <Stack.Screen name="forgot-password" options={defaultScreenOptions} />
             <Stack.Screen name="set-password/[user_id]" options={defaultScreenOptions} />
