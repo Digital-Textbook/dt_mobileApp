@@ -51,9 +51,9 @@ const ForgotPassword: React.FC = () => {
                     <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-[#F2F2F2]">
                         <View className='flex justify-start px-4 items-start'>
                             <View className='flex flex-row items-start justify-start pl-5 pt-14'>
-                                <TouchableOpacity onPress={() => router.push('/users/sign-in')}>
+                                {/* <TouchableOpacity onPress={() => router.push('/users/sign-in')}>
                                     <Ionicons name="arrow-back" size={24} color="black" />
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
 
                             <Image source={images.reset} className="w-full h-60" />

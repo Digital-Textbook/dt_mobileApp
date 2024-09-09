@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,7 +7,7 @@ import CustomButton from "@/components/customButton";
 import { Link, router } from "expo-router";
 import { icons, images } from "@/constants";
 import login from "@/services/api/auth/Session";
-import { useSession } from "@/context/AuthContext";
+import AuthContext from "@/context/AuthContext";
 
 // Define the validation schema with Yup
 const validationSchema = Yup.object().shape({
@@ -18,20 +18,26 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignIn = () => {
-    const { signIn } = useSession();
+    const { signIn } = useContext(AuthContext);
 
     const formik = useFormik({
-        initialValues: { cid_no: '11504000875', password: 'Password@123' },
+        initialValues: { cid_no: '', password: '' },
         validationSchema,
         onSubmit: async (values, { setFieldError }) => {
             try {
-                const response = signIn(values.cid_no, values.password);
+                const response = await login(values.cid_no, values.password);
+                
+                signIn(response.data.accessToken);
+
                 router.replace("/(root)/(tabs)/home");
             } catch (error : any) {
                 const { status, data } = error.response;
 
                 if(status == 409) {
                     setFieldError('cid_no', data.message);
+                } else if (status == 401) { // getting same status code for wrong password and invalid cid no that does not exit.
+                    setFieldError('cid_no', data.message);
+                    setFieldError('password', data.message);
                 }
             }
         },
@@ -87,15 +93,15 @@ const SignIn = () => {
                                 <CustomButton title="Log In" onPress={formik.handleSubmit} className="w-full" />
                             </View>
 
-                            <Link href="/user-type" className="text-lg text-left text-general-200 pt-6 -mt-20">
+
+                            <Link href="/user-type" className="text-lg text-left text-general-200 py-4 -mt-16">
                                 <Text>Don't Have An Account?</Text>
-                                <Text className="text-primary-500">Register</Text>
+                                <Text className="text-primary-500">  Register</Text>
                             </Link>
-                            <View>
-                            <Link href="/forgot-password" className="text-lg text-left text-general-200 pt-5 -mt-1">
+
+                            <Link href="/forgot-password" className="text-lg text-left text-general-200 py-4 -mt-1">
                                 <Text className="text-primary-500 ">Forgot Password?</Text>
                             </Link>
-                            </View>
                         </View>
 
                         <Image
