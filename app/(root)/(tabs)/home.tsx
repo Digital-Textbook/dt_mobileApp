@@ -4,22 +4,17 @@ import { router } from "expo-router"
 import { useContext } from "react"
 import { View, Text } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
+import DashboardBg from "@/components/DashboardBg"
 
 const Home = () =>{
-    const { logout } = useContext(AuthContext);
+   
     
     return(
-        <SafeAreaView>
+        <View className="flex-1">
+            <DashboardBg/>
             <Text className="">Book</Text>
-            <CustomButton
-                title="Log Out"
-                onPress={()=> {
-                    logout();
-                    router.replace("/(auth)/users/sign-in");
-                }}
-                className='w-full mt-1'
-            />
-        </SafeAreaView>
+            
+        </View>
     )
 }
 export default Home

@@ -22,18 +22,43 @@ const ForgotPassword: React.FC = () => {
         validationSchema,
         validateOnChange: false,
         validateOnBlur: false,
+        // onSubmit: async (values, { setFieldError, setFieldValue }) => {
+        //     try {
+        //         const response = await forgotPassword(values.email);
+        //         const data = response.data;
+        //         router.replace(`/(auth)/otp/${data["user"]["id"]}`);
+        //     } catch (error: any) {
+        //         const { status, data } = error.response;
+        //         if (status === 404) {
+        //             setFieldError('email', data.message);
+        //         }
+        //     }
+        // },
         onSubmit: async (values, { setFieldError, setFieldValue }) => {
             try {
                 const response = await forgotPassword(values.email);
                 const data = response.data;
+                
+                // Assuming user id is in the response data
                 router.replace(`/(auth)/otp/${data["user"]["id"]}`);
+                
             } catch (error: any) {
-                const { status, data } = error.response;
-                if (status === 404) {
-                    setFieldError('email', data.message);
+                // Check if error response exists
+                if (error.response) {
+                    const { status, data } = error.response;
+                    
+                    if (status === 404) {
+                        setFieldError('email', data.message);  // Handle error like setting a field error
+                    } else {
+                        Alert.alert('Error', 'Something went wrong, please try again.');  // Generic error message
+                    }
+                } else {
+                    // Handle network or unknown error
+                    console.error('Unexpected Error:', error.message);
+                    Alert.alert('Error', 'Unable to process your request. Please check your connection.');
                 }
             }
-        },
+        }
     });
 
     return (
