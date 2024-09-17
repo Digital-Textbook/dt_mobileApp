@@ -3,8 +3,8 @@ import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: '#225FA7',  tabBarStyle: {
-      backgroundColor: '#FFFFFF'
+    <Tabs screenOptions={{ tabBarInactiveTintColor:'gray', tabBarActiveTintColor: '#225FA7',  tabBarStyle: {
+      backgroundColor: 'white'
     },}}>
       <Tabs.Screen
         name="home"

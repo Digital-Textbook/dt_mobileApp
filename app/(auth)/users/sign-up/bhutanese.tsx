@@ -152,7 +152,7 @@ const BhutaneseSignUpForm = () => {
                                 />
                             </View>
 
-                            <Link href="/users/sign-in" className="text-lg text-left text-general-200 bottom-20">
+                            <Link href="/sign-in" className="text-lg text-left text-general-200 bottom-20">
                                 <Text>Already Have An Account?</Text>
                                 <Text className="text-[#225FA7] font-interSemiBold">Log In</Text>
                             </Link>
@@ -161,6 +161,7 @@ const BhutaneseSignUpForm = () => {
                 </ScrollView>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
+        
     );
 };
 
