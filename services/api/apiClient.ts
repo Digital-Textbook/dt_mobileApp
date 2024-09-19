@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: "http://192.168.101.6:3001",
+  baseURL: "http://192.168.101.15:3001",
+  // baseURL: "http://172.20.10.7:3001",
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
@@ -18,7 +19,7 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Handle errors globally here
+    
     return Promise.reject(error);
   }
 );

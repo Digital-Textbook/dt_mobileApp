@@ -13,9 +13,9 @@
 
 import apiClient from "../apiClient";
 
-const logoutUser = async (userId: string): Promise<boolean> => {
+const logoutUser = async (user_id: string): Promise<boolean> => {
     try {
-        const response = await apiClient.post(`/auth/${userId}/user-logout`);
+        const response = await apiClient.post(`/auth/${user_id}/user-logout`);
         return response.data; // Assuming response.data is a boolean
     } catch (error) {
         console.error("Logout API call failed:", error);

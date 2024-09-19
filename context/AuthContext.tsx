@@ -83,21 +83,72 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         checkAuth();
     }, []);
 
+    // const signIn = async (token: string, user: User) => {
+    //     await SecureStore.setItemAsync(TOKEN_KEY, token);
+    //     apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    //     setIsAuthenticated(true);
+    //     setUser(user); // Set user in context
+    // };
     const signIn = async (token: string, user: User) => {
-        await SecureStore.setItemAsync(TOKEN_KEY, token);
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setIsAuthenticated(true);
-        setUser(user); // Set user in context
-    };
+      await SecureStore.setItemAsync(TOKEN_KEY, token);
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setIsAuthenticated(true);
+      setUser(user); // Set user in context
+  };
+  
 
-    const logout = async () => {
-        console.log("Clearing token and user data");
+    // const logout = async () => {
+    //     console.log("Clearing token and user data");
+    //     await SecureStore.deleteItemAsync(TOKEN_KEY);
+    //     delete apiClient.defaults.headers.common['Authorization'];
+    //     setIsAuthenticated(false);
+    //     setUser(null); // Clear user from context
+    //     console.log("Token and user data cleared");
+    // };
+
+  //   const logout = async () => {
+  //     console.log("Attempting to log out...");
+  //     await SecureStore.deleteItemAsync(TOKEN_KEY); // Clear token from secure storage
+  //     delete apiClient.defaults.headers.common['Authorization']; // Remove the token from API client
+  //     setIsAuthenticated(false); // Update authentication state
+  //     setUser(null); // Clear user data from context
+  
+  //     // Double-check the state and storage after logout
+  //     const currentToken = await SecureStore.getItemAsync(TOKEN_KEY);
+  //     console.log("Current token in SecureStore:", currentToken);
+  
+  //     // Optionally, you can also force a re-render or check if context is properly updated
+  //     console.log("User from context:", user);
+  
+  //     console.log("Logout complete.");
+  // };
+  
+  const logout = async () => {
+    console.log("Attempting to log out...");
+    try {
         await SecureStore.deleteItemAsync(TOKEN_KEY);
         delete apiClient.defaults.headers.common['Authorization'];
+        // Explicitly set state to null
         setIsAuthenticated(false);
-        setUser(null); // Clear user from context
-        console.log("Token and user data cleared");
-    };
+        setUser(null);
+
+        // Add a timeout to ensure state updates are reflected
+        setTimeout(async () => {
+            const token = await SecureStore.getItemAsync(TOKEN_KEY);
+            console.log("Current token in SecureStore after logout:", token);
+            console.log("User from context after logout:", user);
+        }, 0); // Short delay to allow state update
+
+        console.log("Logout complete.");
+    } catch (error) {
+        console.error("Logout failed:", error);
+    }
+};
+
+useEffect(() => {
+  console.log("AuthProvider state updated:", { isAuthenticated, user });
+}, [isAuthenticated, user]);
+
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, user, signIn, logout }}>
