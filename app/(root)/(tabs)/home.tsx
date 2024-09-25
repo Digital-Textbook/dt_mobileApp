@@ -11,14 +11,13 @@ const Home = () => {
 
     return (
         <SafeAreaView className="flex-1">
-            <DashboardBg />
-            <View className="flex-1 justify-center items-center">
-                {user ? (
-                    <Text className="text-xl">Hello, {user.name}</Text>
-                ) : (
-                    <Text className="text-xl">Hello, Guest</Text>
-                )}
-            </View>
+            <DashboardBg>
+                <View className="flex-1 justify-start items-start">
+                    <Text className="text-xl p-2">
+                        {user ? (`Hello, ${user.name}`) : ("Hello, Guest")}
+                    </Text>
+                </View>
+            </DashboardBg>
         </SafeAreaView>
     );
 };

@@ -45,7 +45,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const SomeComponent = () => {
   const [webViewKey, setWebViewKey] = useState(0);
-  const pdfUrl = 'http://192.168.101.15:9000/textbook/260KB (1).pdf';
+  const pdfUrl = 'http://192.168.92.163:9000/textbook/260KB (1).pdf';
   // const pdfUrl = 'http://172.20.10.7:9000/textbook/260KB (1).pdf';
 
   useFocusEffect(

@@ -131,7 +131,8 @@ const PDFViewer = ({ id }) => {
   useEffect(() => {
     const fetchPdf = async () => {
       try {
-        const uri = `http://192.168.101.6:9000/textbook/${id}.pdf`;
+        const uri = `http://192.168.92.163:9000/textbook/${id}.pdf`;
+        // const uri = `http://192.168.101.17:9000/textbook/${id}.pdf`;
         // const uri = `http://172.20.10.7:9000/textbook/${id}.pdf`;
         console.log('Fetching PDF from:', uri);
 
