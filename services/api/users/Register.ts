@@ -6,7 +6,7 @@ const register = async (params: any) : Promise<any> => {
     params['userType'] = USER_TYPE;
     const formattedReqBody = JSON.stringify(params);
 
-    return await apiClient.post('/user/register', formattedReqBody);
+    return await apiClient.post('/digital-textbook/user/register', formattedReqBody);
 }
 
 export default register;

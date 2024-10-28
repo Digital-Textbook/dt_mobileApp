@@ -16,16 +16,11 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://192.168.101.15:3001/textbook';
-// const API_URL = 'http://172.20.10.7:3001/textbook';
-
-
 export const fetchTextbookDetails = async (id: string) => {
+  console.log(`${process.env.EXPO_PUBLIC_API_URI}/digital-textbook/textbook/${id}/textbook-info`)
   try {
-    const response = await axios.get(`${API_URL}/${id}/textbook-details`, {
-      responseType: 'blob', // Set response type to blob for binary data
-    });
-    // Handle the binary data, e.g., download or display
+  console.log("HELLO: " + process.env.EXPO_PUBLIC_API_URI)
+    const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URI}/digital-textbook/textbook/${id}/textbook-info`);
     return response.data;
   } catch (error) {
     console.error('Error fetching textbook details:', error.response ? error.response.data : error.message);

@@ -1,17 +1,14 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  // baseURL: "http://192.168.101.17:3001",
-  baseURL: "http://192.168.92.163:3001",
-  // baseURL: "http://172.20.10.7:3001",
+  baseURL: process.env.EXPO_PUBLIC_API_URI,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 });
-
-// Optionally: Add request/response interceptors for error handling or token management
+console.log(process.env.EXPO_PUBLIC_API_URI);
 apiClient.interceptors.request.use((config) => {
   // Add authorization token here if needed
   return config;

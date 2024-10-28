@@ -9,7 +9,7 @@ interface CitizenshipDetailInterface {
 };
 
 const getCitizenDetails = async (cid_number: string) : Promise<CitizenshipDetailInterface> => {
-    const response = await apiClient.post(`/user/getCidDetail/${cid_number}`, {});
+    const response = await apiClient.post(`/digital-textbook/user/getCidDetail/${cid_number}`, {});
     return response.data;
 }
 

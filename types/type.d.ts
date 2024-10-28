@@ -1,4 +1,5 @@
 import {TextInputProps, TouchableOpacityProps} from "react-native";
+import { ReactNode } from "react";
 
 declare interface ButtonProps extends TouchableOpacityProps {
     title: string;
@@ -6,7 +7,7 @@ declare interface ButtonProps extends TouchableOpacityProps {
     textVariant?: "primary" | "default" | "secondary" | "danger" | "success";
     // IconLeft?: React.ComponentType<any>;
     // IconRight?: React.ComponentType<any>;
-    IconLeft?: React.ReactElement | ImageSourcePropType; // Accepts React component or image source
+    IconLeft?: React.ReactElement | ImageSourcePropType; 
     IconRight?: React.ReactElement | ImageSourcePropType; 
     className?: string;
 }
@@ -21,5 +22,9 @@ declare interface InputFieldProps extends TextInputProps {
     className?: string;
     error?: string;
 }
+
+declare interface DashboardBgProps {
+    children: ReactNode; 
+  }
 export type HandleInputChange = (text: string, index: number) => void;
 

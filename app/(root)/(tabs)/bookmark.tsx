@@ -6,7 +6,7 @@ const Bookmark = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            {/* <EPUBViewer id="260KB" /> */}
+            <EPUBViewer id="260KB" />
         </SafeAreaView>
     )
 }

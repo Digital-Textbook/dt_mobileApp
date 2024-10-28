@@ -1,64 +1,6 @@
-// import React from 'react';
-// import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-// import { WebView } from 'react-native-webview';
-// import useFetchPDF from '../app/(root)/(tabs)/hooks/useFetchPDF'; // Adjust the path as needed
-
-// type PDFViewerProps = {
-//   id: string; // Ensure that `id` is a required prop
-// };
-
-// const PDFViewer: React.FC<PDFViewerProps> = ({ id }) => {
-//   // Ensure `id` is defined
-//   if (!id) {
-//     return (
-//       <View style={styles.container}>
-//         <Text>ID is required</Text>
-//       </View>
-//     );
-//   }
-
-//   const { pdfUrl, loading, error } = useFetchPDF(id);
-
-//   if (loading) {
-//     return (
-//       <View style={styles.container}>
-//         <ActivityIndicator size="large" color="#0000ff" />
-//       </View>
-//     );
-//   }
-
-//   if (error) {
-//     return (
-//       <View style={styles.container}>
-//         <Text>{error}</Text>
-//       </View>
-//     );
-//   }
-
-//   return (
-//     <WebView
-//       source={{ uri: pdfUrl || '' }}
-//       style={styles.webview}
-//     />
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   webview: {
-//     flex: 1,
-//   },
-// });
-
-// export default PDFViewer;
-
 // import React, { useEffect, useState } from 'react';
 // import { View, ActivityIndicator, Text, Alert } from 'react-native';
-// import { WebView } from 'react-native-webview'; // Using WebView for direct display
+// import { WebView } from 'react-native-webview';
 
 // const PDFViewer = ({ id }) => {
 //   const [pdfUri, setPdfUri] = useState(null);
@@ -68,7 +10,9 @@
 //   useEffect(() => {
 //     const fetchPdf = async () => {
 //       try {
-//         const uri = `http://192.168.101.6:9000/textbook/${id}.pdf`; // Replace with your IP address
+//         // const uri = `http://192.168.92.163:9000/textbook/${id}.pdf`;
+//         const uri = `http://192.168.101.28:9000/textbook/${id}.pdf`;
+//         // const uri = `http://172.20.10.7:9000/textbook/${id}.pdf`;
 //         console.log('Fetching PDF from:', uri);
 
 //         if (!uri) {
@@ -122,6 +66,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Text, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
+import apiClient from '../services/api/apiClient'; 
+import { fetchTextbookDetails } from '@/services/api/books/Book';
+import { getFileUrl } from '@/services/api/minIOClient';
 
 const PDFViewer = ({ id }) => {
   const [pdfUri, setPdfUri] = useState(null);
@@ -131,16 +78,9 @@ const PDFViewer = ({ id }) => {
   useEffect(() => {
     const fetchPdf = async () => {
       try {
-        const uri = `http://192.168.92.163:9000/textbook/${id}.pdf`;
-        // const uri = `http://192.168.101.17:9000/textbook/${id}.pdf`;
-        // const uri = `http://172.20.10.7:9000/textbook/${id}.pdf`;
-        console.log('Fetching PDF from:', uri);
-
-        if (!uri) {
-          throw new Error('PDF URL is invalid');
-        }
-
-        setPdfUri(uri);
+        const response = await fetchTextbookDetails(id);
+        const pdfUrl = getFileUrl(response.textbookUrl.replace('localhost:9000/', ''));
+        setPdfUri(pdfUrl);
       } catch (error) {
         console.error('Failed to fetch PDF:', error);
         setError(true);

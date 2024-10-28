@@ -1,27 +1,15 @@
-// import apiClient from "../apiClient";
 
-// const logoutUser = async (userId: string) => {
-//     try {
-//         const response = await apiClient.post(`/auth/${userId}/user-logout`);
-//         return response.data;
-//     } catch (error) {
-//         throw new Error("Logout API failed"); // Throw error if API fails
-//     }
-// };
+import apiClient from '../apiClient';
 
-// export default logoutUser;
-
-import apiClient from "../apiClient";
-
-const logoutUser = async (user_id: string): Promise<boolean> => {
+export const logoutUser = async (userId: any) => {
     try {
-        const response = await apiClient.post(`/auth/${user_id}/user-logout`);
-        return response.data; // Assuming response.data is a boolean
+        const response = await apiClient.post(`digital-textbook/auth/${userId}/user-logout`); 
+        return response.data;
     } catch (error) {
-        console.error("Logout API call failed:", error);
-        throw new Error("Logout API failed");
+        console.error("Logout request failed:", error.response ? error.response.data : error);
+        throw error;
     }
 };
 
-export default logoutUser;
+
 
